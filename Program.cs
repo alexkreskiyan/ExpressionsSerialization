@@ -48,19 +48,19 @@ namespace ExpressionsSerialization
             });
             var result = Deserialize(deserialized);
             var action = result.Compile();
-            var answer = action.DynamicInvoke(GetUser("Alex", 18), 19);
+            var answer = action(GetUser("Alex", 18), 18);
             Console.WriteLine(answer);
         }
 
-        private static INode Serialize(Expression<Func<User, int, bool>> expression)
+        private static LambdaNode Serialize(Expression<Func<User, int, bool>> expression)
         {
-            return provider.GetRequiredService<ISerializer>().Serialize(expression);
+            return (LambdaNode)provider.GetRequiredService<ISerializer>().Serialize(expression);
         }
 
-        private static LambdaExpression Deserialize(INode node)
+        private static Expression<Func<User, int, bool>> Deserialize(INode node)
         {
             return provider.GetRequiredService<ISerializer>()
-                .Deserialize(provider.GetRequiredService<IDeserializationContext>(), node) as LambdaExpression;
+                .Deserialize<Func<User, int, bool>>(provider.GetRequiredService<IDeserializationContext>(), node);
         }
 
         private static IServiceProvider GetServiceProvider()

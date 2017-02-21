@@ -10,5 +10,7 @@ namespace ExpressionsSerialization.Serialization
         INode Serialize(INode parent, Expression expression);
 
         Expression Deserialize(IDeserializationContext context, INode node);
+
+        Expression<T> Deserialize<T>(IDeserializationContext context, INode node);
     }
 }

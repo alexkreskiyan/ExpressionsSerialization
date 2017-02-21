@@ -1,8 +1,10 @@
-using ExpressionsSerialization.Nodes;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
-using ExpressionsSerialization.Serialization.Handlers;
 using System.Reflection;
+using ExpressionsSerialization.Nodes;
+using ExpressionsSerialization.Serialization.Handlers;
 
 namespace ExpressionsSerialization.Serialization
 {
@@ -61,6 +63,38 @@ namespace ExpressionsSerialization.Serialization
                 );
 
             return (handler as IExpressionDeserializer).Deserialize(context, node);
+        }
+
+        public Expression<T> Deserialize<T>(IDeserializationContext context, INode node)
+        {
+            var raw = (LambdaExpression)Deserialize(context, node);
+
+            var typeArguments = raw.Parameters
+                .Select(parameter => parameter.Type)
+                .ToList();
+
+            if (raw.ReturnType != null)
+                typeArguments.Add(raw.ReturnType);
+
+            var resultType = raw.ReturnType == null
+                ? Expression.GetActionType(typeArguments.ToArray())
+                : Expression.GetFuncType(typeArguments.ToArray());
+
+            var method = typeof(Expression)
+                .GetMethods()
+                .First(candidate =>
+                {
+                    var parameters = candidate.GetParameters();
+
+                    return candidate.Name == "Lambda"
+                        && candidate.GetGenericArguments().Length == 1
+                        && parameters.Length == 2
+                        && parameters[0].ParameterType == typeof(Expression)
+                        && parameters[1].ParameterType == typeof(IEnumerable<ParameterExpression>);
+                })
+                .MakeGenericMethod(resultType);
+
+            return (Expression<T>)method.Invoke(null, new object[] { raw.Body, raw.Parameters });
         }
     }
 }
