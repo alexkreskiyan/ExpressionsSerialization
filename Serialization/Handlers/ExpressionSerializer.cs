@@ -11,9 +11,9 @@ namespace ExpressionsSerialization.Serialization.Handlers
 
         public INode Serialize(Expression expression) => Serialize((TExpression)expression);
 
-        public abstract Expression Deserialize(TNode node);
+        public abstract Expression Deserialize(IDeserializationContext context, TNode node);
 
-        public Expression Deserialize(INode node) => Deserialize((TNode)node);
+        public Expression Deserialize(IDeserializationContext context, INode node) => Deserialize(context, (TNode)node);
     }
 
     public interface IExpressionSerializer<TExpression> : IExpressionSerializer
@@ -25,7 +25,7 @@ namespace ExpressionsSerialization.Serialization.Handlers
     public interface IExpressionDeserializer<TNode> : IExpressionDeserializer
         where TNode : INode
     {
-        Expression Deserialize(TNode node);
+        Expression Deserialize(IDeserializationContext context, TNode node);
     }
 
     public interface IExpressionSerializer
@@ -35,6 +35,6 @@ namespace ExpressionsSerialization.Serialization.Handlers
 
     public interface IExpressionDeserializer
     {
-        Expression Deserialize(INode node);
+        Expression Deserialize(IDeserializationContext context, INode node);
     }
 }

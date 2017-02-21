@@ -16,7 +16,7 @@ namespace ExpressionsSerialization.Serialization.Handlers
             return node;
         }
 
-        public override Expression Deserialize(ParameterNode node)
+        public override Expression Deserialize(IDeserializationContext context, ParameterNode node)
         {
             return Expression.Parameter(node.Type, node.Name);
         }

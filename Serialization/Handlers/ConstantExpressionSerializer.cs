@@ -17,7 +17,7 @@ namespace ExpressionsSerialization.Serialization.Handlers
             return node;
         }
 
-        public override Expression Deserialize(ConstantNode node)
+        public override Expression Deserialize(IDeserializationContext context, ConstantNode node)
         {
             return Expression.Constant(Convert.ChangeType(node.Value, node.Type), node.Type);
         }

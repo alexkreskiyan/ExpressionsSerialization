@@ -25,10 +25,10 @@ namespace ExpressionsSerialization.Serialization.Handlers
             return node;
         }
 
-        public override Expression Deserialize(MemberNode node)
+        public override Expression Deserialize(IDeserializationContext context, MemberNode node)
         {
             return System.Linq.Expressions.Expression.MakeMemberAccess(
-                serializer.Deserialize(node.Expression),
+                serializer.Deserialize(context, node.Expression),
                 node.MemberDeclaringType.GetTypeInfo().GetProperty(node.MemberName)
             );
         }

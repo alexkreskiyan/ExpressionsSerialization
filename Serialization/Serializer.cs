@@ -49,7 +49,7 @@ namespace ExpressionsSerialization.Serialization
             return Serialize(expression);
         }
 
-        public Expression Deserialize(INode node)
+        public Expression Deserialize(IDeserializationContext context, INode node)
         {
             var handler = serviceProvider.GetService(
                 typeof(IExpressionDeserializer<>).MakeGenericType(node.GetType())
@@ -60,7 +60,7 @@ namespace ExpressionsSerialization.Serialization
                     $"No deserializer registered for node type {node.GetType()}"
                 );
 
-            return (handler as IExpressionDeserializer).Deserialize(node);
+            return (handler as IExpressionDeserializer).Deserialize(context, node);
         }
     }
 }

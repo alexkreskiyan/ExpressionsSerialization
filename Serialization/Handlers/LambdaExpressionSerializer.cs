@@ -26,12 +26,12 @@ namespace ExpressionsSerialization.Serialization.Handlers
             return node;
         }
 
-        public override Expression Deserialize(LambdaNode node)
+        public override Expression Deserialize(IDeserializationContext context, LambdaNode node)
         {
             return Expression.Lambda(
-                serializer.Deserialize(node.Body),
+                serializer.Deserialize(context, node.Body),
                 false,
-                node.Parameters.Select(parameter => serializer.Deserialize(parameter) as ParameterExpression)
+                node.Parameters.Select(parameter => serializer.Deserialize(context, parameter) as ParameterExpression)
             );
         }
     }

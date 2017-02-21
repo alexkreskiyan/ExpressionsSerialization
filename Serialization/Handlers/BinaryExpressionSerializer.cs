@@ -22,12 +22,12 @@ namespace ExpressionsSerialization.Serialization.Handlers
             return node;
         }
 
-        public override Expression Deserialize(BinaryNode node)
+        public override Expression Deserialize(IDeserializationContext context, BinaryNode node)
         {
             return Expression.MakeBinary(
                 node.NodeType,
-                serializer.Deserialize(node.Left),
-                serializer.Deserialize(node.Right)
+                serializer.Deserialize(context, node.Left),
+                serializer.Deserialize(context, node.Right)
             );
         }
     }

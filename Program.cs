@@ -14,6 +14,22 @@ namespace ExpressionsSerialization
     {
         private static IServiceProvider provider;
 
+        public static void Main_()
+        {
+            var param = Expression.Parameter(typeof(int), "x");
+            var expression = Expression.Lambda(
+                Expression.GreaterThanOrEqual(
+                    param,
+                    Expression.Constant(5)
+                ),
+                param
+            );
+
+            var func = expression.Compile();
+            var result = func.DynamicInvoke(6);
+            Console.WriteLine(result);
+        }
+
         public static void Main()
         {
             provider = GetServiceProvider();
@@ -38,20 +54,22 @@ namespace ExpressionsSerialization
 
         private static INode Serialize(Expression<Func<User, bool>> expression)
         {
-            return provider.GetRequiredService<Serialization.ISerializer>().Serialize(expression);
+            return provider.GetRequiredService<ISerializer>().Serialize(expression);
         }
 
         private static LambdaExpression Deserialize(INode node)
         {
-            return provider.GetRequiredService<Serialization.ISerializer>().Deserialize(node) as LambdaExpression;
+            return provider.GetRequiredService<ISerializer>()
+                .Deserialize(provider.GetRequiredService<IDeserializationContext>(), node) as LambdaExpression;
         }
 
         private static IServiceProvider GetServiceProvider()
         {
             var services = new ServiceCollection();
 
-            services.AddSingleton<Serialization.ISerializer, Serializer>();
+            services.AddSingleton<ISerializer, Serializer>();
             services.AddSingleton<ITransitionMap, TransitionMap>();
+            services.AddSingleton<IDeserializationContext, DeserializationContext>();
 
             //register serilizers
             services.AddSingleton<IExpressionSerializer<LambdaExpression>, LambdaExpressionSerializer>();

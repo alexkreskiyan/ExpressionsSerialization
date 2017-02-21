@@ -9,6 +9,6 @@ namespace ExpressionsSerialization.Serialization
 
         INode Serialize(INode parent, Expression expression);
 
-        Expression Deserialize(INode node);
+        Expression Deserialize(IDeserializationContext context, INode node);
     }
 }
