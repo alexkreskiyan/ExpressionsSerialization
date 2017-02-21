@@ -28,10 +28,13 @@ namespace ExpressionsSerialization.Serialization.Handlers
 
         public override Expression Deserialize(IDeserializationContext context, LambdaNode node)
         {
+            var parameters = node.Parameters
+                .Select(parameter => serializer.Deserialize(context, parameter) as ParameterExpression);
+
             return Expression.Lambda(
                 serializer.Deserialize(context, node.Body),
                 false,
-                node.Parameters.Select(parameter => serializer.Deserialize(context, parameter) as ParameterExpression)
+                parameters
             );
         }
     }

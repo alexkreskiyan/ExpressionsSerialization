@@ -25,6 +25,7 @@ namespace ExpressionsSerialization.Serialization
             Add(
                 ExpressionType.GreaterThanOrEqual,
                 ExpressionType.MemberAccess,
+                ExpressionType.Parameter,
                 ExpressionType.Constant
             );
         }

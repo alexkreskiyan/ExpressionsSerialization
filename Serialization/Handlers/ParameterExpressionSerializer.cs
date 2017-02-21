@@ -18,7 +18,13 @@ namespace ExpressionsSerialization.Serialization.Handlers
 
         public override Expression Deserialize(IDeserializationContext context, ParameterNode node)
         {
-            return Expression.Parameter(node.Type, node.Name);
+            if (context.Parameters.ContainsKey(node.Name))
+                return context.Parameters[node.Name];
+
+            var parameter = Expression.Parameter(node.Type, node.Name);
+            context.Parameters.Add(parameter.Name, parameter);
+
+            return parameter;
         }
     }
 }

@@ -34,7 +34,7 @@ namespace ExpressionsSerialization
         {
             provider = GetServiceProvider();
             var raw = Serialize(
-                user => user.Age >= 18
+                (user, age) => user.Age >= age
             );
             var serialized = JsonConvert.SerializeObject(raw, new JsonSerializerSettings()
             {
@@ -48,11 +48,11 @@ namespace ExpressionsSerialization
             });
             var result = Deserialize(deserialized);
             var action = result.Compile();
-            var answer = action.DynamicInvoke(GetUser("Alex", 15));
-            Console.WriteLine(serialized);
+            var answer = action.DynamicInvoke(GetUser("Alex", 18), 19);
+            Console.WriteLine(answer);
         }
 
-        private static INode Serialize(Expression<Func<User, bool>> expression)
+        private static INode Serialize(Expression<Func<User, int, bool>> expression)
         {
             return provider.GetRequiredService<ISerializer>().Serialize(expression);
         }
