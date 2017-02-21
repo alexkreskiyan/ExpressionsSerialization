@@ -1,4 +1,4 @@
-namespace ExpressionsSerialization.ExpressionsEasy
+namespace ExpressionsSerialization.SymbolsEasy
 {
     public interface IExpression
     {

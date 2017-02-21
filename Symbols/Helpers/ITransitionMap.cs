@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace ExpressionsSerialization.Expressions
+namespace ExpressionsSerialization.Symbols.Helpers
 {
     public interface ITransitionMap
     {

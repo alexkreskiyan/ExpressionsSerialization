@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace ExpressionsSerialization.Expressions
+namespace ExpressionsSerialization.Symbols.Helpers
 {
     public class TransitionMap : ITransitionMap
     {
@@ -13,8 +13,14 @@ namespace ExpressionsSerialization.Expressions
         {
             Add(
                 ExpressionType.Lambda,
+                ExpressionType.Parameter,
                 ExpressionType.AndAlso,
                 ExpressionType.GreaterThanOrEqual
+            );
+            Add(
+                ExpressionType.MemberAccess,
+                ExpressionType.MemberAccess,
+                ExpressionType.Parameter
             );
             Add(
                 ExpressionType.GreaterThanOrEqual,

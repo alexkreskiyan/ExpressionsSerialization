@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ExpressionsSerialization.ExpressionsEasy
+namespace ExpressionsSerialization.SymbolsEasy
 {
     public enum ConditionType
     {
@@ -8,17 +8,17 @@ namespace ExpressionsSerialization.ExpressionsEasy
         Or
     }
 
-    public class Condition : IExpression
+    public class Condition : ISymbol
     {
-        public static Condition And(params IExpression[] expressions)
+        public static Condition And(params ISymbol[] expressions)
             => new Condition(ConditionType.And, expressions);
 
-        public static Condition Or(params IExpression[] expressions)
+        public static Condition Or(params ISymbol[] expressions)
             => new Condition(ConditionType.Or, expressions);
 
-        public IEnumerable<IExpression> expressions { get; }
+        public IEnumerable<ISymbol> expressions { get; }
 
-        private Condition(ConditionType type, IExpression[] expressions)
+        private Condition(ConditionType type, ISymbol[] expressions)
         {
             this.expressions = expressions;
         }
