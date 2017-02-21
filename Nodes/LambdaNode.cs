@@ -4,7 +4,7 @@ namespace ExpressionsSerialization.Nodes
 {
     public class LambdaNode : INode
     {
-        public ExpressionType NodeType { get; } = ExpressionType.Lambda;
+        public ExpressionType NodeType { get; set; } = ExpressionType.Lambda;
 
         public INode[] Parameters { get; set; }
 

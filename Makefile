@@ -4,11 +4,14 @@ clean:
 	@echo "Done"
 
 restore:
-	dotnet restore
+	@dotnet restore
 	@echo "Done"
 
 build:
-	dotnet build
+	@dotnet build
 	@echo "Done"
+
+run:
+	@dotnet exec ./bin/Debug/netcoreapp1.0/ExpressionsSerialization.dll
 
 rebuild: clean restore build
