@@ -1,9 +1,10 @@
+using System;
 using System.Linq.Expressions;
 using ExpressionsSerialization.Nodes;
 
 namespace ExpressionsSerialization.Serialization.Handlers
 {
-    public class ParameterExpressionSerializer : ExpressionSerializer<ParameterExpression>
+    public class ParameterExpressionSerializer : ExpressionSerializer<ParameterNode, ParameterExpression>
     {
         public override INode Serialize(ParameterExpression expression)
         {
@@ -14,6 +15,11 @@ namespace ExpressionsSerialization.Serialization.Handlers
             node.Name = expression.Name;
 
             return node;
+        }
+
+        public override Expression Deserialize(ParameterNode node)
+        {
+            throw new NotImplementedException();
         }
     }
 }

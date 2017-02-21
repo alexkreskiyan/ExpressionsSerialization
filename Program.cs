@@ -44,11 +44,11 @@ namespace ExpressionsSerialization
             services.AddSingleton<Serialization.ISerializer, Serializer>();
             services.AddSingleton<ITransitionMap, TransitionMap>();
 
-            services.AddSingleton<ExpressionSerializer<LambdaExpression>, LambdaExpressionSerializer>();
-            services.AddSingleton<ExpressionSerializer<ParameterExpression>, ParameterExpressionSerializer>();
-            services.AddSingleton<ExpressionSerializer<BinaryExpression>, BinaryExpressionSerializer>();
-            services.AddSingleton<ExpressionSerializer<MemberExpression>, MemberExpressionSerializer>();
-            services.AddSingleton<ExpressionSerializer<ConstantExpression>, ConstantExpressionSerializer>();
+            services.AddSingleton<IExpressionSerializer<LambdaExpression>, LambdaExpressionSerializer>();
+            services.AddSingleton<IExpressionSerializer<ParameterExpression>, ParameterExpressionSerializer>();
+            services.AddSingleton<IExpressionSerializer<BinaryExpression>, BinaryExpressionSerializer>();
+            services.AddSingleton<IExpressionSerializer<MemberExpression>, MemberExpressionSerializer>();
+            services.AddSingleton<IExpressionSerializer<ConstantExpression>, ConstantExpressionSerializer>();
 
             return services.BuildServiceProvider();
         }

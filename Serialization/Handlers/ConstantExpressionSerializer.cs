@@ -1,9 +1,10 @@
+using System;
 using System.Linq.Expressions;
 using ExpressionsSerialization.Nodes;
 
 namespace ExpressionsSerialization.Serialization.Handlers
 {
-    public class ConstantExpressionSerializer : ExpressionSerializer<ConstantExpression>
+    public class ConstantExpressionSerializer : ExpressionSerializer<ConstantNode, ConstantExpression>
     {
         public override INode Serialize(ConstantExpression expression)
         {
@@ -13,6 +14,11 @@ namespace ExpressionsSerialization.Serialization.Handlers
             node.Value = expression.Value;
 
             return node;
+        }
+
+        public override Expression Deserialize(ConstantNode node)
+        {
+            throw new NotImplementedException();
         }
     }
 }

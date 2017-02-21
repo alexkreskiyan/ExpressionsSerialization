@@ -1,10 +1,11 @@
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using ExpressionsSerialization.Nodes;
 
 namespace ExpressionsSerialization.Serialization.Handlers
 {
-    public class LambdaExpressionSerializer : ExpressionSerializer<LambdaExpression>
+    public class LambdaExpressionSerializer : ExpressionSerializer<LambdaNode, LambdaExpression>
     {
         private readonly ISerializer serializer;
 
@@ -24,6 +25,11 @@ namespace ExpressionsSerialization.Serialization.Handlers
             node.Body = serializer.Serialize(node, expression.Body);
 
             return node;
+        }
+
+        public override Expression Deserialize(LambdaNode node)
+        {
+            throw new NotImplementedException();
         }
     }
 }

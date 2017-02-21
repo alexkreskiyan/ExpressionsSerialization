@@ -1,9 +1,10 @@
+using System;
 using System.Linq.Expressions;
 using ExpressionsSerialization.Nodes;
 
 namespace ExpressionsSerialization.Serialization.Handlers
 {
-    public class BinaryExpressionSerializer : ExpressionSerializer<BinaryExpression>
+    public class BinaryExpressionSerializer : ExpressionSerializer<BinaryNode, BinaryExpression>
     {
         private readonly ISerializer serializer;
 
@@ -20,6 +21,11 @@ namespace ExpressionsSerialization.Serialization.Handlers
             node.Right = serializer.Serialize(node, expression.Right);
 
             return node;
+        }
+
+        public override Expression Deserialize(BinaryNode node)
+        {
+            throw new NotImplementedException();
         }
     }
 }

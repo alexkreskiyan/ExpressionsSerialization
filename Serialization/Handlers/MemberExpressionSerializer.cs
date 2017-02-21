@@ -1,9 +1,10 @@
+using System;
 using System.Linq.Expressions;
 using ExpressionsSerialization.Nodes;
 
 namespace ExpressionsSerialization.Serialization.Handlers
 {
-    public class MemberExpressionSerializer : ExpressionSerializer<MemberExpression>
+    public class MemberExpressionSerializer : ExpressionSerializer<MemberNode, MemberExpression>
     {
         private readonly ISerializer serializer;
 
@@ -22,6 +23,11 @@ namespace ExpressionsSerialization.Serialization.Handlers
             node.MemberName = expression.Member.Name;
 
             return node;
+        }
+
+        public override Expression Deserialize(MemberNode node)
+        {
+            throw new NotImplementedException();
         }
     }
 }

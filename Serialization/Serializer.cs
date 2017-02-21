@@ -28,7 +28,7 @@ namespace ExpressionsSerialization.Serialization
             do
             {
                 handler = serviceProvider.GetService(
-                    typeof(ExpressionSerializer<>).MakeGenericType(expressionType)
+                    typeof(IExpressionSerializer<>).MakeGenericType(expressionType)
                 );
                 expressionType = expressionType.GetTypeInfo().BaseType;
             }
@@ -36,7 +36,7 @@ namespace ExpressionsSerialization.Serialization
 
             if (handler == null)
                 throw new InvalidOperationException(
-                    $"No serialization handler registered for expression type {expression.GetType()}"
+                    $"No serializer registered for expression type {expression.GetType()}"
                 );
 
             return (handler as Handlers.IExpressionSerializer).Serialize(expression);
@@ -53,11 +53,5 @@ namespace ExpressionsSerialization.Serialization
         {
             throw new NotImplementedException();
         }
-
-        // public ISymbol Serialize(SystemExpression expression)
-        //     => new SymbolFactory(new TransitionMap()).Create(expression);
-
-        // public SystemExpression Deserialize(ISymbol expression)
-        //     => expression.ToExpression();
     }
 }
