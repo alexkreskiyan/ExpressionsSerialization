@@ -30,11 +30,20 @@ namespace ExpressionsSerialization
             {
                 TypeNameHandling = TypeNameHandling.Objects
             });
+            var result = Deserialize(deserialized);
+            var action = result.Compile();
+            var answer = action.DynamicInvoke(GetUser("Alex", 15));
+            Console.WriteLine(serialized);
         }
 
         private static INode Serialize(Expression<Func<User, bool>> expression)
         {
             return provider.GetRequiredService<Serialization.ISerializer>().Serialize(expression);
+        }
+
+        private static LambdaExpression Deserialize(INode node)
+        {
+            return provider.GetRequiredService<Serialization.ISerializer>().Deserialize(node) as LambdaExpression;
         }
 
         private static IServiceProvider GetServiceProvider()
@@ -44,13 +53,30 @@ namespace ExpressionsSerialization
             services.AddSingleton<Serialization.ISerializer, Serializer>();
             services.AddSingleton<ITransitionMap, TransitionMap>();
 
+            //register serilizers
             services.AddSingleton<IExpressionSerializer<LambdaExpression>, LambdaExpressionSerializer>();
             services.AddSingleton<IExpressionSerializer<ParameterExpression>, ParameterExpressionSerializer>();
             services.AddSingleton<IExpressionSerializer<BinaryExpression>, BinaryExpressionSerializer>();
             services.AddSingleton<IExpressionSerializer<MemberExpression>, MemberExpressionSerializer>();
             services.AddSingleton<IExpressionSerializer<ConstantExpression>, ConstantExpressionSerializer>();
 
+            //register deserilizers
+            services.AddSingleton<IExpressionDeserializer<LambdaNode>, LambdaExpressionSerializer>();
+            services.AddSingleton<IExpressionDeserializer<ParameterNode>, ParameterExpressionSerializer>();
+            services.AddSingleton<IExpressionDeserializer<BinaryNode>, BinaryExpressionSerializer>();
+            services.AddSingleton<IExpressionDeserializer<MemberNode>, MemberExpressionSerializer>();
+            services.AddSingleton<IExpressionDeserializer<ConstantNode>, ConstantExpressionSerializer>();
+
             return services.BuildServiceProvider();
+        }
+
+        private static User GetUser(string name, int age)
+        {
+            return new User
+            {
+                Name = name,
+                Age = age
+            };
         }
     }
 }

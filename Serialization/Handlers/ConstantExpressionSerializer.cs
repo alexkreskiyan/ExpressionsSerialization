@@ -11,6 +11,7 @@ namespace ExpressionsSerialization.Serialization.Handlers
             var node = new ConstantNode();
 
             node.NodeType = expression.NodeType;
+            node.Type = expression.Type;
             node.Value = expression.Value;
 
             return node;
@@ -18,7 +19,7 @@ namespace ExpressionsSerialization.Serialization.Handlers
 
         public override Expression Deserialize(ConstantNode node)
         {
-            throw new NotImplementedException();
+            return Expression.Constant(Convert.ChangeType(node.Value, node.Type), node.Type);
         }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Linq.Expressions;
 using ExpressionsSerialization.Nodes;
 
@@ -25,7 +24,11 @@ namespace ExpressionsSerialization.Serialization.Handlers
 
         public override Expression Deserialize(BinaryNode node)
         {
-            throw new NotImplementedException();
+            return Expression.MakeBinary(
+                node.NodeType,
+                serializer.Deserialize(node.Left),
+                serializer.Deserialize(node.Right)
+            );
         }
     }
 }

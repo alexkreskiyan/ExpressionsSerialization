@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Linq.Expressions;
 using ExpressionsSerialization.Nodes;
@@ -29,7 +28,11 @@ namespace ExpressionsSerialization.Serialization.Handlers
 
         public override Expression Deserialize(LambdaNode node)
         {
-            throw new NotImplementedException();
+            return Expression.Lambda(
+                serializer.Deserialize(node.Body),
+                false,
+                node.Parameters.Select(parameter => serializer.Deserialize(parameter) as ParameterExpression)
+            );
         }
     }
 }

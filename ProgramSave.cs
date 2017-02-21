@@ -30,15 +30,6 @@ namespace ExpressionsSerialization
         // return Serialize();
         // }
 
-        private static User GetUser(string name, int age)
-        {
-            return new User
-            {
-                Name = name,
-                Age = age
-            };
-        }
-
         // private static string Serialize(Expression<Func<User, bool>> expression)
         // {
         //     return JsonConvert.SerializeObject(new ExpressionSerializer().Serialize(expression), new JsonSerializerSettings()

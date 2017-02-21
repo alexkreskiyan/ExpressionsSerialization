@@ -1,5 +1,5 @@
-using System;
 using System.Linq.Expressions;
+using System.Reflection;
 using ExpressionsSerialization.Nodes;
 
 namespace ExpressionsSerialization.Serialization.Handlers
@@ -27,7 +27,10 @@ namespace ExpressionsSerialization.Serialization.Handlers
 
         public override Expression Deserialize(MemberNode node)
         {
-            throw new NotImplementedException();
+            return System.Linq.Expressions.Expression.MakeMemberAccess(
+                serializer.Deserialize(node.Expression),
+                node.MemberDeclaringType.GetTypeInfo().GetProperty(node.MemberName)
+            );
         }
     }
 }

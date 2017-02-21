@@ -39,7 +39,7 @@ namespace ExpressionsSerialization.Serialization
                     $"No serializer registered for expression type {expression.GetType()}"
                 );
 
-            return (handler as Handlers.IExpressionSerializer).Serialize(expression);
+            return (handler as IExpressionSerializer).Serialize(expression);
         }
 
         public INode Serialize(INode parent, Expression expression)
@@ -51,7 +51,16 @@ namespace ExpressionsSerialization.Serialization
 
         public Expression Deserialize(INode node)
         {
-            throw new NotImplementedException();
+            var handler = serviceProvider.GetService(
+                typeof(IExpressionDeserializer<>).MakeGenericType(node.GetType())
+            );
+
+            if (handler == null)
+                throw new InvalidOperationException(
+                    $"No deserializer registered for node type {node.GetType()}"
+                );
+
+            return (handler as IExpressionDeserializer).Deserialize(node);
         }
     }
 }

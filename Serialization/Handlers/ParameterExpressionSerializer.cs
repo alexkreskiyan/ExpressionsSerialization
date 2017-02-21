@@ -1,4 +1,3 @@
-using System;
 using System.Linq.Expressions;
 using ExpressionsSerialization.Nodes;
 
@@ -19,7 +18,7 @@ namespace ExpressionsSerialization.Serialization.Handlers
 
         public override Expression Deserialize(ParameterNode node)
         {
-            throw new NotImplementedException();
+            return Expression.Parameter(node.Type, node.Name);
         }
     }
 }
