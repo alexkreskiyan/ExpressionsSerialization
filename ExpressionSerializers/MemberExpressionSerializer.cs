@@ -32,5 +32,10 @@ namespace ExpressionsSerialization.ExpressionSerializers
                 node.MemberDeclaringType.GetTypeInfo().GetProperty(node.MemberName)
             );
         }
+
+        public override Expression Compile(ICompilationContext context, MemberExpression expression)
+        {
+            return expression;
+        }
     }
 }

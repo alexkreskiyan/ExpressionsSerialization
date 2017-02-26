@@ -67,16 +67,46 @@ namespace ExpressionsSerialization
 
         public Expression<T> Deserialize<T>(IDeserializationContext context, IExpressionNode node)
         {
-            var raw = (LambdaExpression)Deserialize(context, node);
+            return Convert<T>((LambdaExpression)Deserialize(context, node));
+        }
 
-            var typeArguments = raw.Parameters
+        public Expression Compile(ICompilationContext context, Expression expression)
+        {
+            var expressionType = expression.GetType();
+            object handler;
+
+            do
+            {
+                handler = serviceProvider.GetService(
+                    typeof(IExpressionCompiler<>).MakeGenericType(expressionType)
+                );
+                expressionType = expressionType.GetTypeInfo().BaseType;
+            }
+            while (handler == null && expressionType != typeof(Expression));
+
+            if (handler == null)
+                throw new InvalidOperationException(
+                    $"No compiler registered for expression type {expression.GetType()}"
+                );
+
+            return (handler as IExpressionCompiler).Compile(context, expression);
+        }
+
+        public Expression<T> Compile<T>(ICompilationContext context, Expression expression)
+        {
+            return Convert<T>((LambdaExpression)Compile(context, expression));
+        }
+
+        private Expression<T> Convert<T>(LambdaExpression expression)
+        {
+            var typeArguments = expression.Parameters
                 .Select(parameter => parameter.Type)
                 .ToList();
 
-            if (raw.ReturnType != null)
-                typeArguments.Add(raw.ReturnType);
+            if (expression.ReturnType != null)
+                typeArguments.Add(expression.ReturnType);
 
-            var resultType = raw.ReturnType == null
+            var resultType = expression.ReturnType == null
                 ? Expression.GetActionType(typeArguments.ToArray())
                 : Expression.GetFuncType(typeArguments.ToArray());
 
@@ -94,7 +124,7 @@ namespace ExpressionsSerialization
                 })
                 .MakeGenericMethod(resultType);
 
-            return (Expression<T>)method.Invoke(null, new object[] { raw.Body, raw.Parameters });
+            return (Expression<T>)method.Invoke(null, new object[] { expression.Body, expression.Parameters });
         }
     }
 }

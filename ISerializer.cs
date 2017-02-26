@@ -12,5 +12,9 @@ namespace ExpressionsSerialization
         Expression Deserialize(IDeserializationContext context, IExpressionNode node);
 
         Expression<T> Deserialize<T>(IDeserializationContext context, IExpressionNode node);
+
+        Expression Compile(ICompilationContext context, Expression expression);
+
+        Expression<T> Compile<T>(ICompilationContext context, Expression expression);
     }
 }

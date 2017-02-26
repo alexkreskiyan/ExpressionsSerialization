@@ -37,5 +37,18 @@ namespace ExpressionsSerialization.ExpressionSerializers
                 parameters
             );
         }
+
+        public override Expression Compile(ICompilationContext context, LambdaExpression expression)
+        {
+            var parameters = expression.Parameters
+                .Where(parameter => !context.ParametersValues.ContainsKey(parameter.Name))
+                .Select(parameter => serializer.Compile(context, parameter) as ParameterExpression);
+
+            return Expression.Lambda(
+                serializer.Compile(context, expression.Body),
+                false,
+                parameters
+            );
+        }
     }
 }

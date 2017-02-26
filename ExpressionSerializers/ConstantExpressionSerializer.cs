@@ -21,5 +21,10 @@ namespace ExpressionsSerialization.ExpressionSerializers
         {
             return Expression.Constant(Convert.ChangeType(node.Value, node.Type), node.Type);
         }
+
+        public override Expression Compile(ICompilationContext context, ConstantExpression expression)
+        {
+            return expression;
+        }
     }
 }

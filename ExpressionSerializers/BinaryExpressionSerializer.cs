@@ -30,5 +30,14 @@ namespace ExpressionsSerialization.ExpressionSerializers
                 serializer.Deserialize(context, node.Right)
             );
         }
+
+        public override Expression Compile(ICompilationContext context, BinaryExpression expression)
+        {
+            return Expression.MakeBinary(
+                expression.NodeType,
+                serializer.Compile(context, expression.Left),
+                serializer.Compile(context, expression.Right)
+            );
+        }
     }
 }

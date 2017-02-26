@@ -1,3 +1,4 @@
+using System;
 using System.Linq.Expressions;
 using ExpressionsSerialization.ExpressionNodes;
 
@@ -25,6 +26,17 @@ namespace ExpressionsSerialization.ExpressionSerializers
             context.Parameters.Add(parameter.Name, parameter);
 
             return parameter;
+        }
+
+        public override Expression Compile(ICompilationContext context, ParameterExpression expression)
+        {
+            if (!context.ParametersValues.ContainsKey(expression.Name))
+                return expression;
+
+            return Expression.Constant(
+                Convert.ChangeType(context.ParametersValues[expression.Name], expression.Type),
+                expression.Type
+            );
         }
     }
 }
