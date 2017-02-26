@@ -1,13 +1,13 @@
 using System.Linq.Expressions;
-using ExpressionsSerialization.Nodes;
+using ExpressionsSerialization.ExpressionNodes;
 
-namespace ExpressionsSerialization.Serialization.Handlers
+namespace ExpressionsSerialization.ExpressionSerializers
 {
-    public class ParameterExpressionSerializer : ExpressionSerializer<ParameterNode, ParameterExpression>
+    public class ParameterExpressionSerializer : ExpressionSerializer<ParameterExpressionNode, ParameterExpression>
     {
-        public override INode Serialize(ParameterExpression expression)
+        public override IExpressionNode Serialize(ParameterExpression expression)
         {
-            var node = new ParameterNode();
+            var node = new ParameterExpressionNode();
 
             node.NodeType = expression.NodeType;
             node.Type = expression.Type;
@@ -16,7 +16,7 @@ namespace ExpressionsSerialization.Serialization.Handlers
             return node;
         }
 
-        public override Expression Deserialize(IDeserializationContext context, ParameterNode node)
+        public override Expression Deserialize(IDeserializationContext context, ParameterExpressionNode node)
         {
             if (context.Parameters.ContainsKey(node.Name))
                 return context.Parameters[node.Name];

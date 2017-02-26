@@ -1,5 +1,5 @@
 ﻿using System;
-using ExpressionsSerialization.Nodes;
+using ExpressionsSerialization.ExpressionNodes;
 using Newtonsoft.Json;
 
 namespace ExpressionsSerialization
@@ -53,14 +53,14 @@ namespace ExpressionsSerialization
 
         private static void Test()
         {
-            var source = new BinaryNode()
+            var source = new BinaryExpressionNode()
             {
-                Left = new ParameterNode()
+                Left = new ParameterExpressionNode()
                 {
                     Type = typeof(int),
                     Name = "x"
                 },
-                Right = new ConstantNode()
+                Right = new ConstantExpressionNode()
                 {
                     Value = 5
                 }
@@ -70,7 +70,7 @@ namespace ExpressionsSerialization
                 TypeNameHandling = TypeNameHandling.Objects
             });
             Console.WriteLine(raw);
-            var result = JsonConvert.DeserializeObject<BinaryNode>(raw, new JsonSerializerSettings()
+            var result = JsonConvert.DeserializeObject<BinaryExpressionNode>(raw, new JsonSerializerSettings()
             {
                 TypeNameHandling = TypeNameHandling.Objects
             });

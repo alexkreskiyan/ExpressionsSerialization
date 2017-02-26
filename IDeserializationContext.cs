@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace ExpressionsSerialization.Serialization
+namespace ExpressionsSerialization
 {
     public interface IDeserializationContext
     {

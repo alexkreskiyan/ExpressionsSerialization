@@ -1,10 +1,10 @@
 using System.Linq;
 using System.Linq.Expressions;
-using ExpressionsSerialization.Nodes;
+using ExpressionsSerialization.ExpressionNodes;
 
-namespace ExpressionsSerialization.Serialization.Handlers
+namespace ExpressionsSerialization.ExpressionSerializers
 {
-    public class LambdaExpressionSerializer : ExpressionSerializer<LambdaNode, LambdaExpression>
+    public class LambdaExpressionSerializer : ExpressionSerializer<LambdaExpressionNode, LambdaExpression>
     {
         private readonly ISerializer serializer;
 
@@ -13,9 +13,9 @@ namespace ExpressionsSerialization.Serialization.Handlers
             this.serializer = serializer;
         }
 
-        public override INode Serialize(LambdaExpression expression)
+        public override IExpressionNode Serialize(LambdaExpression expression)
         {
-            var node = new LambdaNode();
+            var node = new LambdaExpressionNode();
 
             node.Parameters = expression.Parameters
                 .Select(parameter => serializer.Serialize(node, parameter))
@@ -26,7 +26,7 @@ namespace ExpressionsSerialization.Serialization.Handlers
             return node;
         }
 
-        public override Expression Deserialize(IDeserializationContext context, LambdaNode node)
+        public override Expression Deserialize(IDeserializationContext context, LambdaExpressionNode node)
         {
             var parameters = node.Parameters
                 .Select(parameter => serializer.Deserialize(context, parameter) as ParameterExpression);

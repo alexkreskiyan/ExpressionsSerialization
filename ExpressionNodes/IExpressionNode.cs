@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
 
-namespace ExpressionsSerialization.Nodes
+namespace ExpressionsSerialization.ExpressionNodes
 {
-    public interface INode
+    public interface IExpressionNode
     {
         ExpressionType NodeType { get; set; }
     }

@@ -1,14 +1,14 @@
 using System;
 using System.Linq.Expressions;
 
-namespace ExpressionsSerialization.Nodes
+namespace ExpressionsSerialization.ExpressionNodes
 {
-    public class ParameterNode : INode
+    public class ConstantExpressionNode : IExpressionNode
     {
         public ExpressionType NodeType { get; set; }
 
         public Type Type { get; set; }
 
-        public string Name { get; set; }
+        public object Value { get; set; }
     }
 }

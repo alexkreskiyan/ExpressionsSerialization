@@ -1,10 +1,10 @@
 using System.Linq.Expressions;
 using System.Reflection;
-using ExpressionsSerialization.Nodes;
+using ExpressionsSerialization.ExpressionNodes;
 
-namespace ExpressionsSerialization.Serialization.Handlers
+namespace ExpressionsSerialization.ExpressionSerializers
 {
-    public class MemberExpressionSerializer : ExpressionSerializer<MemberNode, MemberExpression>
+    public class MemberExpressionSerializer : ExpressionSerializer<MemberExpressionNode, MemberExpression>
     {
         private readonly ISerializer serializer;
 
@@ -13,9 +13,9 @@ namespace ExpressionsSerialization.Serialization.Handlers
             this.serializer = serializer;
         }
 
-        public override INode Serialize(MemberExpression expression)
+        public override IExpressionNode Serialize(MemberExpression expression)
         {
-            var node = new MemberNode();
+            var node = new MemberExpressionNode();
 
             node.NodeType = expression.NodeType;
             node.Expression = serializer.Serialize(node, expression.Expression);
@@ -25,7 +25,7 @@ namespace ExpressionsSerialization.Serialization.Handlers
             return node;
         }
 
-        public override Expression Deserialize(IDeserializationContext context, MemberNode node)
+        public override Expression Deserialize(IDeserializationContext context, MemberExpressionNode node)
         {
             return System.Linq.Expressions.Expression.MakeMemberAccess(
                 serializer.Deserialize(context, node.Expression),

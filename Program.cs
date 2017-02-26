@@ -1,10 +1,9 @@
 using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization.Formatters;
+using ExpressionsSerialization.ExpressionNodes;
+using ExpressionsSerialization.ExpressionSerializers;
 using ExpressionsSerialization.Models;
-using ExpressionsSerialization.Nodes;
-using ExpressionsSerialization.Serialization;
-using ExpressionsSerialization.Serialization.Handlers;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
@@ -42,7 +41,7 @@ namespace ExpressionsSerialization
                 TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
             });
             Console.WriteLine(serialized);
-            var deserialized = JsonConvert.DeserializeObject<LambdaNode>(serialized, new JsonSerializerSettings()
+            var deserialized = JsonConvert.DeserializeObject<LambdaExpressionNode>(serialized, new JsonSerializerSettings()
             {
                 TypeNameHandling = TypeNameHandling.Objects
             });
@@ -52,12 +51,12 @@ namespace ExpressionsSerialization
             Console.WriteLine(answer);
         }
 
-        private static LambdaNode Serialize(Expression<Func<User, int, bool>> expression)
+        private static LambdaExpressionNode Serialize(Expression<Func<User, int, bool>> expression)
         {
-            return (LambdaNode)provider.GetRequiredService<ISerializer>().Serialize(expression);
+            return (LambdaExpressionNode)provider.GetRequiredService<ISerializer>().Serialize(expression);
         }
 
-        private static Expression<Func<User, int, bool>> Deserialize(INode node)
+        private static Expression<Func<User, int, bool>> Deserialize(IExpressionNode node)
         {
             return provider.GetRequiredService<ISerializer>()
                 .Deserialize<Func<User, int, bool>>(provider.GetRequiredService<IDeserializationContext>(), node);
@@ -79,11 +78,11 @@ namespace ExpressionsSerialization
             services.AddSingleton<IExpressionSerializer<ConstantExpression>, ConstantExpressionSerializer>();
 
             //register deserilizers
-            services.AddSingleton<IExpressionDeserializer<LambdaNode>, LambdaExpressionSerializer>();
-            services.AddSingleton<IExpressionDeserializer<ParameterNode>, ParameterExpressionSerializer>();
-            services.AddSingleton<IExpressionDeserializer<BinaryNode>, BinaryExpressionSerializer>();
-            services.AddSingleton<IExpressionDeserializer<MemberNode>, MemberExpressionSerializer>();
-            services.AddSingleton<IExpressionDeserializer<ConstantNode>, ConstantExpressionSerializer>();
+            services.AddSingleton<IExpressionDeserializer<LambdaExpressionNode>, LambdaExpressionSerializer>();
+            services.AddSingleton<IExpressionDeserializer<ParameterExpressionNode>, ParameterExpressionSerializer>();
+            services.AddSingleton<IExpressionDeserializer<BinaryExpressionNode>, BinaryExpressionSerializer>();
+            services.AddSingleton<IExpressionDeserializer<MemberExpressionNode>, MemberExpressionSerializer>();
+            services.AddSingleton<IExpressionDeserializer<ConstantExpressionNode>, ConstantExpressionSerializer>();
 
             return services.BuildServiceProvider();
         }

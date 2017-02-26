@@ -1,13 +1,13 @@
 using System;
 using System.Linq.Expressions;
 
-namespace ExpressionsSerialization.Nodes
+namespace ExpressionsSerialization.ExpressionNodes
 {
-    public class MemberNode : INode
+    public class MemberExpressionNode : IExpressionNode
     {
         public ExpressionType NodeType { get; set; }
 
-        public INode Expression { get; set; }
+        public IExpressionNode Expression { get; set; }
 
         public Type MemberDeclaringType { get; set; }
 

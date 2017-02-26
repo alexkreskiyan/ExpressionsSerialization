@@ -1,9 +1,9 @@
 using System.Linq.Expressions;
-using ExpressionsSerialization.Nodes;
+using ExpressionsSerialization.ExpressionNodes;
 
-namespace ExpressionsSerialization.Serialization.Handlers
+namespace ExpressionsSerialization.ExpressionSerializers
 {
-    public class BinaryExpressionSerializer : ExpressionSerializer<BinaryNode, BinaryExpression>
+    public class BinaryExpressionSerializer : ExpressionSerializer<BinaryExpressionNode, BinaryExpression>
     {
         private readonly ISerializer serializer;
 
@@ -12,9 +12,9 @@ namespace ExpressionsSerialization.Serialization.Handlers
             this.serializer = serializer;
         }
 
-        public override INode Serialize(BinaryExpression expression)
+        public override IExpressionNode Serialize(BinaryExpression expression)
         {
-            var node = new BinaryNode();
+            var node = new BinaryExpressionNode();
             node.NodeType = expression.NodeType;
             node.Left = serializer.Serialize(node, expression.Left);
             node.Right = serializer.Serialize(node, expression.Right);
@@ -22,7 +22,7 @@ namespace ExpressionsSerialization.Serialization.Handlers
             return node;
         }
 
-        public override Expression Deserialize(IDeserializationContext context, BinaryNode node)
+        public override Expression Deserialize(IDeserializationContext context, BinaryExpressionNode node)
         {
             return Expression.MakeBinary(
                 node.NodeType,

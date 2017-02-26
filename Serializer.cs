@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using ExpressionsSerialization.Nodes;
-using ExpressionsSerialization.Serialization.Handlers;
+using ExpressionsSerialization.ExpressionNodes;
+using ExpressionsSerialization.ExpressionSerializers;
 
-namespace ExpressionsSerialization.Serialization
+namespace ExpressionsSerialization
 {
     public class Serializer : ISerializer
     {
@@ -22,7 +22,7 @@ namespace ExpressionsSerialization.Serialization
             this.transitionMap = transitionMap;
         }
 
-        public INode Serialize(Expression expression)
+        public IExpressionNode Serialize(Expression expression)
         {
             var expressionType = expression.GetType();
             object handler;
@@ -44,14 +44,14 @@ namespace ExpressionsSerialization.Serialization
             return (handler as IExpressionSerializer).Serialize(expression);
         }
 
-        public INode Serialize(INode parent, Expression expression)
+        public IExpressionNode Serialize(IExpressionNode parent, Expression expression)
         {
             transitionMap.EnsureValidTransition(parent.NodeType, expression.NodeType);
 
             return Serialize(expression);
         }
 
-        public Expression Deserialize(IDeserializationContext context, INode node)
+        public Expression Deserialize(IDeserializationContext context, IExpressionNode node)
         {
             var handler = serviceProvider.GetService(
                 typeof(IExpressionDeserializer<>).MakeGenericType(node.GetType())
@@ -65,7 +65,7 @@ namespace ExpressionsSerialization.Serialization
             return (handler as IExpressionDeserializer).Deserialize(context, node);
         }
 
-        public Expression<T> Deserialize<T>(IDeserializationContext context, INode node)
+        public Expression<T> Deserialize<T>(IDeserializationContext context, IExpressionNode node)
         {
             var raw = (LambdaExpression)Deserialize(context, node);
 
